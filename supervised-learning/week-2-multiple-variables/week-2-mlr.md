@@ -39,11 +39,11 @@ f = np.dot(w, x) + b
 Why is it faster? `np.dot()` grabs all values of w and x and multiplies them in parallel rather than sequentially, turning calculations that could take hours into minutes.
 
 ### 3. Gradient Descent for Multiple Linear Regression
-To train the model, we use gradient descent to simultaneously update all parameters $w_1 \dots w_n$ and $b$.Repeat until convergence:
-w_j = w_j - \alpha \frac{\partial}{\partial w_j} J(\vec{w},b) \quad \text{for } j = 1 \dots n
-b = b - \alpha \frac{\partial}{\partial b} J(\vec{w},b)
-w_j = w_j - \alpha \frac{1}{m} \sum_{i=1}^{m} \left( f_{\vec{w},b}(\vec{x}^{(i)}) - y^{(i)} \right) x_j^{(i)}
-b = b - \alpha \frac{1}{m} \sum_{i=1}^{m} \left( f_{\vec{w},b}(\vec{x}^{(i)}) - y^{(i)} \right)
+To train the model, we use gradient descent to simultaneously update all parameters $w_1 \dots w_n$ and $b$.
+Repeat until convergence: $w_j = w_j - \alpha \frac{\partial}{\partial w_j} J(\vec{w},b) \quad \text{for } j = 1 \dots n$
+* $b = b - \alpha \frac{\partial}{\partial b} J(\vec{w},b)$
+* $w_j = w_j - \alpha \frac{1}{m} \sum_{i=1}^{m} \left( f_{\vec{w},b}(\vec{x}^{(i)}) - y^{(i)} \right) x_j^{(i)}$
+* $b = b - \alpha \frac{1}{m} \sum_{i=1}^{m} \left( f_{\vec{w},b}(\vec{x}^{(i)}) - y^{(i)} \right)$
 
 ### 4. Alternative: The Normal Equation
 * An analytical way to solve for $w$ and $b$ exactly without needing iterations
