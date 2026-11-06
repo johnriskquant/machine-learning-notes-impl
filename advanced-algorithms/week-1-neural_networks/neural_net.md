@@ -123,3 +123,85 @@ model.fit(
 # 4. Inference: Make predictions on new data
 predictions = model.predict(X_new)
 ```
+
+## Neural Network Implementation in Python: Forward Propagation
+
+### 8. Implementing a Dense Layer (With For-Loops)
+To build a neural network from scratch, we start by defining a single **Dense Layer**. This function takes the activations from the previous layer (`a_in`), the weights matrix (`W`), and the bias vector (`b`), and computes the activations for the current layer.
+
+**Notation Convention:** 
+*   Uppercase letters (e.g., $W$) denote matrices.
+*   Lowercase letters (e.g., $a, b, w$) denote vectors or scalars.
+
+**Python Implementation:**
+    
+    import numpy as np
+
+    def dense(a_in, W, b):
+        units = W.shape[1]             # Number of hidden units in this layer
+        a_out = np.zeros(units)        # Initialize output array
+        for j in range(units):
+            w = W[:,j]                 # Extract the j-th column of weights
+            z = w @ a_in + b[j]        # Dot product of weights and inputs + bias
+            a_out[j] = g(z)            # Apply activation function (e.g., sigmoid)
+        return a_out
+
+### 9. Stringing Layers Sequentially
+Once the `dense` function is defined, we can implement forward propagation for an entire neural network by passing the output of one layer directly as the input to the next layer.
+
+**Python Implementation:**
+
+    def sequential(x):
+        a1 = dense(x, W1, b1)
+        a2 = dense(a1, W2, b2)
+        a3 = dense(a2, W3, b3)
+        a4 = dense(a3, W4, b4)
+        f_x = a4                       # Final output prediction
+        return f_x
+
+## Matrix Multiplication and Vectorization
+
+### 1. Vector and Matrix Math Foundations
+*   **Vector-Vector Dot Product:** 
+    $$z = \vec{a} \cdot \vec{w} = a^T w$$
+    This multiplies matching elements and sums them.
+*   **Matrix Transpose ($A^T$):** Taking the columns of a matrix and laying them on their side to form rows.
+*   **Matrix-Matrix Multiplication:**
+    When multiplying $A^T \times W$, the element in row $i$ and column $j$ of the resulting matrix $Z$ is calculated by taking the dot product of the $i$-th row of $A^T$ and the $j$-th column of $W$.
+    *   *Rule:* The inner dimensions must match (e.g., a $3 \times 2$ matrix multiplied by a $2 \times 4$ matrix yields a $3 \times 4$ matrix).
+
+### 2. Vectorized Implementation of a Dense Layer
+Using for-loops is computationally slow. Modern computers and GPUs are highly optimized to perform matrix multiplications in parallel. By representing inputs, weights, and biases as matrices, we can compute the entire layer's activations in a single step.
+
+**Vectorized Python Implementation:**
+
+    def dense(A_in, W, B):
+        Z = np.matmul(A_in, W) + B     # Parallelized matrix multiplication
+        A_out = g(Z)                   # Element-wise activation
+        return A_out
+
+**Implementation Notes (TensorFlow Convention):**
+*   `np.matmul(A_in, W)` can also be written as `A_in @ W`.
+*   In TensorFlow, individual training examples are laid out in rows within the matrix $X$ (which is why we use $A\_in$ directly rather than transposing it to $A^T$ in the code). 
+*   Vectorization drastically reduces runtime for large neural networks, shifting execution time from hours down to minutes.
+
+---
+
+## Artificial Intelligence: AGI vs. ANI
+
+### 1. Artificial Narrow Intelligence (ANI)
+*   **Definition:** AI systems designed to do a single, narrow task extremely well.
+*   **Examples:** Smart speakers, self-driving cars, web search, or specific industrial applications.
+*   **Status:** Has seen tremendous progress and creates massive economic value today.
+
+### 2. Artificial General Intelligence (AGI)
+*   **Definition:** The dream of building AI systems that can do anything a typical human can do.
+*   **Status:** Despite rapid progress in ANI, the path to AGI remains unclear. Progress in narrow tasks does not necessarily equal progress toward general intelligence.
+
+### 3. The "One Learning Algorithm" Hypothesis
+Neuroscience experiments suggest the biological brain might use a single, highly adaptable learning algorithm rather than hard-coded distinct functions.
+*   **Neuroplasticity Experiments:** 
+    *   If the auditory cortex is rewired to receive input from the eyes, it learns to *see*.
+    *   If the somatosensory (touch) cortex is rewired to the eyes, it also learns to *see*.
+    *   Humans can learn to "see" via voltages mapped to their tongues, or navigate using echolocation and magnetic haptic belts.
+*   **Takeaway:** The brain is incredibly plastic and adapts to process whatever sensory data it receives. While modern artificial neural networks (like logistic regression units) are vastly oversimplified compared to biological neurons, replicating this adaptability remains a core inspiration for AGI research.
