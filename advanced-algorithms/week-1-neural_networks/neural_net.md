@@ -103,16 +103,22 @@ from tensorflow.keras.layers import Dense
 
 # 1. Define the model architecture
 model = Sequential([
-    Dense(units=25, activation='sigmoid'), # Layer 1
-    Dense(units=15, activation='sigmoid'), # Layer 2
+    Dense(units=25, activation='sigmoid', name='layer1'), # Layer 1
+    Dense(units=15, activation='sigmoid', name='layer2'), # Layer 2
     Dense(units=1, activation='sigmoid')   # Output Layer
 ])
 
 # 2. Compile the model (Prepare for training)
-model.compile(...) 
+model.compile(
+    loss = tf.keras.losses.BinaryCrossentropy(),
+    optimizer = tf.keras.optimizers.Adam(learning_rate=0.01),
+)
 
 # 3. Train the model on data X and targets Y
-model.fit(X, Y)
+model.fit(
+    X,Y,            
+    epochs=10,
+)
 
 # 4. Inference: Make predictions on new data
 predictions = model.predict(X_new)
