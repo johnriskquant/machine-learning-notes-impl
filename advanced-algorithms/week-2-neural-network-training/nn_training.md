@@ -4,7 +4,7 @@
 Training a neural network follows the exact same three foundational steps used to train a logistic regression model, but scaled up for multiple layers and neurons.
 
 **Recall: Logistic Regression Steps**
-1.  **Specify the model:** Define how to compute the output given input $x$ and parameters $w, b$ (e.g., $f_{\vec{w},b}(\vec{x}) = g(\vec{w} \cdot \vec{x} + b)$).
+1.  **Specify the model:** Define how to compute the output given input $x$ and parameters $w, b$ (e.g., $`f_{\vec{w},b}(\vec{x}) = g(\vec{w} \cdot \vec{x} + b)`$).
 2.  **Specify the loss and cost functions:** Define the single-example Loss $L(f(\vec{x}), y)$ and the average Cost $J(\vec{w},b)$ over the entire dataset.
 3.  **Minimize the cost function:** Use an optimization algorithm like Gradient Descent to iteratively update the parameters and minimize $J$.
 
@@ -25,7 +25,7 @@ This step defines how the neural network computes its forward propagation. It te
 *   Output Layer: 1 unit, Sigmoid activation
 
 **TensorFlow Code:**
-
+```python
     import tensorflow as tf
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import Dense
@@ -35,8 +35,8 @@ This step defines how the neural network computes its forward propagation. It te
         Dense(units=15, activation='sigmoid'),
         Dense(units=1, activation='sigmoid')
     ])
-
-*Note: This structure automatically defines all the weight matrices ($W^{[1]}, W^{[2]}, W^{[3]}$) and bias vectors ($B^{[1]}, B^{[2]}, B^{[3]}$).*
+```
+*Note: This structure automatically defines all the weight matrices ($`W^{[1]}, W^{[2]}, W^{[3]}`$) and bias vectors ($`B^{[1]}, B^{[2]}, B^{[3]}`$).*
 
 ---
 
@@ -55,10 +55,10 @@ Once the architecture is defined, you must tell the network how to measure its m
 $$J(W, B) = \frac{1}{m} \sum_{i=1}^{m} L(f_{W,B}(\vec{x}^{(i)}), y^{(i)})$$
 
 **TensorFlow Code:**
-
+```python
     # Compiling the model for a binary classification task
     model.compile(loss=tf.keras.losses.BinaryCrossentropy())
-
+```
 ---
 
 ### 4. Step 3: Fitting the Model (Optimization)
@@ -76,10 +76,10 @@ To run Gradient Descent, you need the partial derivatives of the cost function w
 An epoch is a technical term for one complete pass of the learning algorithm over the entire training dataset.
 
 **TensorFlow Code:**
-
+```python
     # Train the model for 100 iterations (epochs)
     model.fit(X, Y, epochs=100)
-
+```
 ---
 
 ## Activation Functions in Neural Networks
@@ -116,7 +116,7 @@ The choice for the output layer is typically dictated by the ground truth label 
 *   *(Note: Other functions like Leaky ReLU, Tanh, or Swish are sometimes used in research, but standard ReLU is generally sufficient for most applications).*
 
 **TensorFlow Implementation:**
-
+```python
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import Dense
 
@@ -125,7 +125,7 @@ The choice for the output layer is typically dictated by the ground truth label 
         Dense(units=15, activation='relu'),    # Hidden layer: ReLU
         Dense(units=1, activation='sigmoid')   # Output layer: Sigmoid (for binary classification)
     ])
-
+```
 ---
 
 ### 3. Why We Need Non-Linear Activation Functions
@@ -203,7 +203,7 @@ Computers have finite memory to store floating-point numbers. Explicitly computi
 Instead of calculating $a$ as an intermediate step, we can pass the raw $z$ values (called **logits**) directly into the loss function. TensorFlow can internally rearrange the mathematical terms to compute the loss with much higher numerical stability.
 
 **Recommended TensorFlow Code:**
-
+```python
     import tensorflow as tf
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import Dense
@@ -221,7 +221,7 @@ Instead of calculating $a$ as an intermediate step, we can pass the raw $z$ valu
     )
 
     model.fit(X, Y, epochs=100)
-
+```
 
 **Handling Predictions:**
 Because the output layer is now linear, the model outputs raw logits (from negative to positive infinity), not probabilities. 
