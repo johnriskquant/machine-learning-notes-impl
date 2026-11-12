@@ -111,7 +111,7 @@ The choice for the output layer is typically dictated by the ground truth label 
 #### For the Hidden Layers
 **ReLU** is overwhelmingly the most common default choice for hidden layers today. 
 *   **Why ReLU over Sigmoid?**
-    1.  *Computational Efficiency:* ReLU is much faster to compute ($\max(0, z)$) compared to Sigmoid (which requires exponentiation).
+    1.  *Computational Efficiency:* ReLU is much faster to compute ($`\max(0, z)`$) compared to Sigmoid (which requires exponentiation).
     2.  *Faster Learning (Gradient Descent):* The Sigmoid function goes flat at both extremes (very high or very low values), which causes the gradient to vanish and slows down Gradient Descent. ReLU only goes flat on the left side (negative values), which generally allows the neural network to learn much faster.
 *   *(Note: Other functions like Leaky ReLU, Tanh, or Swish are sometimes used in research, but standard ReLU is generally sufficient for most applications).*
 
@@ -197,7 +197,7 @@ To implement multiclass classification in a neural network, place the Softmax fu
 ---
 
 ### 4. Improved Implementation (Numerical Stability)
-Computers have finite memory to store floating-point numbers. Explicitly computing the softmax probabilities ($a$) and then plugging them into the log loss function ($-\log(a)$) can cause severe **numerical round-off errors** (overflow/underflow) if $z$ values are very large or very small.
+Computers have finite memory to store floating-point numbers. Explicitly computing the softmax probabilities ($a$) and then plugging them into the log loss function ($`-\log(a)`$) can cause severe **numerical round-off errors** (overflow/underflow) if $z$ values are very large or very small.
 
 **The Preferred "Logits" Method:**
 Instead of calculating $a$ as an intermediate step, we can pass the raw $z$ values (called **logits**) directly into the loss function. TensorFlow can internally rearrange the mathematical terms to compute the loss with much higher numerical stability.
