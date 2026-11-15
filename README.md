@@ -27,8 +27,8 @@ This repository is built to be highly forkable and serves as a practical bridge 
 
 #### 🧠 Course 2: Advanced Learning Algorithms
 * [Week 1: Neural Networks](./advanced-algorithms/week-1-neural-networks) — Forward propagation, matrix multiplication layers, and TensorFlow model building.
-* [Week 2: Neural Network Training](./advanced-algorithms/week-2-network-training) — Backpropagation calculus, activation functions (ReLU, Softmax), and optimization variants.
-* [Week 3: Advice for Applying Machine Learning](./advanced-algorithms/week-3-ml-advice-for-applying-ML) — Bias/variance diagnostics, learning curves, error analysis, and iterative development workflows.
+* [Week 2: Neural Network Training](./advanced-algorithms/week-2-neural-network-training) — Backpropagation calculus, activation functions (ReLU, Softmax), and optimization variants.
+* [Week 3: Advice for Applying Machine Learning](./advanced-algorithms/week-3-advice-for-applying-ML) — Bias/variance diagnostics, learning curves, error analysis, and iterative development workflows.
 * [Week 4: Decision Trees](./advanced-algorithms/week-4-decision-trees) — Information gain, entropy metrics, tree ensembles, random forests, and XGBoost mechanics.
 
 #### 🤖 Course 3: Unsupervised Learning, Recommenders, Reinforcement Learning
