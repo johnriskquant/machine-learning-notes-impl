@@ -1,10 +1,34 @@
+## Table of Contents
+
+* [Week 2: Training a Neural Network](#week-2-training-a-neural-network)
+  * [1. The Three Steps of Training](#1-the-three-steps-of-training)
+  * [2. Step 1: Model Specification (Architecture)](#2-step-1-model-specification-architecture)
+  * [3. Step 2: Compiling the Model (Loss & Cost Functions)](#3-step-2-compiling-the-model-loss--cost-functions)
+  * [4. Step 3: Fitting the Model (Optimization)](#4-step-3-fitting-the-model-optimization)
+* [Activation Functions in Neural Networks](#activation-functions-in-neural-networks)
+  * [1. Types of Activation Functions](#1-types-of-activation-functions)
+  * [2. Choosing Activation Functions](#2-choosing-activation-functions)
+  * [3. Why We Need Non-Linear Activation Functions](#3-why-we-need-non-linear-activation-functions)
+* [Advanced Classification: Multi-class, Softmax, and Multi-label](#advanced-classification-multi-class-softmax-and-multi-label)
+  * [1. Multi-class Classification](#1-multi-class-classification)
+  * [2. Softmax Regression](#2-softmax-regression)
+  * [3. Neural Networks with Softmax](#3-neural-networks-with-softmax)
+  * [4. Improved Implementation (Numerical Stability)](#4-improved-implementation-numerical-stability)
+  * [5. Multi-label Classification](#5-multi-label-classification)
+* [Advanced Optimization and Backpropagation](#advanced-optimization-and-backpropagation)
+  * [1. Advanced Optimization: The Adam Algorithm](#1-advanced-optimization-the-adam-algorithm)
+  * [2. Alternative Layer Types: Convolutional Layers](#2-alternative-layer-types-convolutional-layers)
+  * [3. The Computation Graph & Backpropagation](#3-the-computation-graph--backpropagation)
+
+---
+
 ## Week 2: Training a Neural Network
 
-### 1. The Three Steps of Training 
+### 1. The Three Steps of Training
 Training a neural network follows the exact same three foundational steps used to train a logistic regression model, but scaled up for multiple layers and neurons.
 
 **Recall: Logistic Regression Steps**
-1.  **Specify the model:** Define how to compute the output given input $x$ and parameters $w, b$ (e.g., $`f_{\vec{w},b}(\vec{x}) = g(\vec{w} \cdot \vec{x} + b)`$).
+1.  **Specify the model:** Define how to compute the output given input $x$ and parameters $w, b$ (e.g., $f_{\vec{w},b}(\vec{x}) = g(\vec{w} \cdot \vec{x} + b)$).
 2.  **Specify the loss and cost functions:** Define the single-example Loss $L(f(\vec{x}), y)$ and the average Cost $J(\vec{w},b)$ over the entire dataset.
 3.  **Minimize the cost function:** Use an optimization algorithm like Gradient Descent to iteratively update the parameters and minimize $J$.
 
@@ -25,7 +49,7 @@ This step defines how the neural network computes its forward propagation. It te
 *   Output Layer: 1 unit, Sigmoid activation
 
 **TensorFlow Code:**
-```python
+
     import tensorflow as tf
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import Dense
@@ -35,8 +59,8 @@ This step defines how the neural network computes its forward propagation. It te
         Dense(units=15, activation='sigmoid'),
         Dense(units=1, activation='sigmoid')
     ])
-```
-*Note: This structure automatically defines all the weight matrices ($`W^{[1]}, W^{[2]}, W^{[3]}`$) and bias vectors ($`B^{[1]}, B^{[2]}, B^{[3]}`$).*
+
+*Note: This structure automatically defines all the weight matrices ($W^{[1]}, W^{[2]}, W^{[3]}$) and bias vectors ($B^{[1]}, B^{[2]}, B^{[3]}$).*
 
 ---
 
@@ -55,10 +79,10 @@ Once the architecture is defined, you must tell the network how to measure its m
 $$J(W, B) = \frac{1}{m} \sum_{i=1}^{m} L(f_{W,B}(\vec{x}^{(i)}), y^{(i)})$$
 
 **TensorFlow Code:**
-```python
+
     # Compiling the model for a binary classification task
     model.compile(loss=tf.keras.losses.BinaryCrossentropy())
-```
+
 ---
 
 ### 4. Step 3: Fitting the Model (Optimization)
@@ -76,10 +100,12 @@ To run Gradient Descent, you need the partial derivatives of the cost function w
 An epoch is a technical term for one complete pass of the learning algorithm over the entire training dataset.
 
 **TensorFlow Code:**
-```python
+
     # Train the model for 100 iterations (epochs)
     model.fit(X, Y, epochs=100)
-```
+
+[↑ Back to Table of Contents](#table-of-contents)
+
 ---
 
 ## Activation Functions in Neural Networks
@@ -87,14 +113,14 @@ An epoch is a technical term for one complete pass of the learning algorithm ove
 ### 1. Types of Activation Functions
 Initially, neural networks relied heavily on the **Sigmoid** activation function because they were built by stringing together logistic regression units. However, modern neural networks use a variety of activation functions to handle different types of data and improve learning efficiency.
 
-*   **Sigmoid Function:** 
+*   **Sigmoid Function:**
     *   $g(z) = \frac{1}{1 + e^{-z}}$
     *   Outputs values between 0 and 1.
-*   **ReLU (Rectified Linear Unit):** 
+*   **ReLU (Rectified Linear Unit):**
     *   $g(z) = \max(0, z)$
     *   Outputs 0 if $z$ is negative; outputs $z$ (a straight 45-degree line) if $z$ is zero or positive.
     *   Ideal for modeling non-negative continuous variables (e.g., degree of product awareness, house prices).
-*   **Linear Activation Function:** 
+*   **Linear Activation Function:**
     *   $g(z) = z$
     *   Sometimes referred to as using "no activation function".
 
@@ -109,14 +135,14 @@ The choice for the output layer is typically dictated by the ground truth label 
 *   **Regression - Non-Negative Values ($y \ge 0$):** Use **ReLU**. (e.g., predicting house prices, which cannot be negative).
 
 #### For the Hidden Layers
-**ReLU** is overwhelmingly the most common default choice for hidden layers today. 
+**ReLU** is overwhelmingly the most common default choice for hidden layers today.
 *   **Why ReLU over Sigmoid?**
-    1.  *Computational Efficiency:* ReLU is much faster to compute ($`\max(0, z)`$) compared to Sigmoid (which requires exponentiation).
+    1.  *Computational Efficiency:* ReLU is much faster to compute ($\max(0, z)$) compared to Sigmoid (which requires exponentiation).
     2.  *Faster Learning (Gradient Descent):* The Sigmoid function goes flat at both extremes (very high or very low values), which causes the gradient to vanish and slows down Gradient Descent. ReLU only goes flat on the left side (negative values), which generally allows the neural network to learn much faster.
 *   *(Note: Other functions like Leaky ReLU, Tanh, or Swish are sometimes used in research, but standard ReLU is generally sufficient for most applications).*
 
 **TensorFlow Implementation:**
-```python
+
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import Dense
 
@@ -125,27 +151,29 @@ The choice for the output layer is typically dictated by the ground truth label 
         Dense(units=15, activation='relu'),    # Hidden layer: ReLU
         Dense(units=1, activation='sigmoid')   # Output layer: Sigmoid (for binary classification)
     ])
-```
+
 ---
 
 ### 3. Why We Need Non-Linear Activation Functions
-What happens if we just use a **Linear** activation function ($g(z) = z$) for all hidden layers? 
+What happens if we just use a **Linear** activation function ($g(z) = z$) for all hidden layers?
 
-The entire neural network collapses into a simple linear regression model, defeating the purpose of having multiple layers. 
+The entire neural network collapses into a simple linear regression model, defeating the purpose of having multiple layers.
 
 **Mathematical Proof (1 hidden layer example):**
-1.  **Hidden Layer:** $a^{[1]} = w^{[1]}x + b^{[1]}$ 
+1.  **Hidden Layer:** $a^{[1]} = w^{[1]}x + b^{[1]}$
 2.  **Output Layer:** $a^{[2]} = w^{[2]}a^{[1]} + b^{[2]}$
-3.  **Substitution:** 
-    $a^{[2]} = w^{[2]}(w^{[1]}x + b^{[1]}) + b^{[2]}$
-    $a^{[2]} = (w^{[2]}w^{[1]})x + (w^{[2]}b^{[1]} + b^{[2]})$
-4.  **Conclusion:** Let $W = w^{[2]}w^{[1]}$ and $B = w^{[2]}b^{[1]} + b^{[2]}$. The output simplifies to $a^{[2]} = Wx + B$. 
+3.  **Substitution:**
+    $$a^{[2]} = w^{[2]}(w^{[1]}x + b^{[1]}) + b^{[2]}$$
+    $$a^{[2]} = (w^{[2]}w^{[1]})x + (w^{[2]}b^{[1]} + b^{[2]})$$
+4.  **Conclusion:** Let $W = w^{[2]}w^{[1]}$ and $B = w^{[2]}b^{[1]} + b^{[2]}$. The output simplifies to $a^{[2]} = Wx + B$.
 
 *   A linear function of a linear function is just another linear function.
 *   If you use linear activations in hidden layers and a linear output, the network is equivalent to **Linear Regression**.
 *   If you use linear activations in hidden layers and a Sigmoid output, the network is equivalent to standard **Logistic Regression**.
 
 **Golden Rule:** Never use the linear activation function in hidden layers. Default to ReLU to allow the network to learn complex, non-linear features.
+
+[↑ Back to Table of Contents](#table-of-contents)
 
 ---
 
@@ -169,13 +197,13 @@ Softmax regression is a direct generalization of logistic regression to handle m
     $$a_j = \frac{e^{z_j}}{\sum_{k=1}^{N} e^{z_k}}$$
 
 *   **Interpretation:** $a_j$ is the estimated probability that $y=j$ given the input $x$.
-*   **Property:** By definition of the formula, all activations $a_1 + a_2 + \dots + a_N$ will always sum up exactly to $1$. 
+*   **Property:** By definition of the formula, all activations $a_1 + a_2 + \dots + a_N$ will always sum up exactly to $1$.
 
 **Cost Function (Cross-Entropy Loss):**
 For a single training example where the true ground truth label is $y$, the loss is:
 $$L = -\log(a_y)$$
 
-*   If the true class is $j$, the loss is simply $-\log(a_j)$. 
+*   If the true class is $j$, the loss is simply $-\log(a_j)$.
 *   **Intuition:** If the model predicts a high probability for the correct class (e.g., $a_j \approx 1$), the loss is near 0. If it predicts a low probability, the loss approaches infinity.
 
 ---
@@ -197,13 +225,13 @@ To implement multiclass classification in a neural network, place the Softmax fu
 ---
 
 ### 4. Improved Implementation (Numerical Stability)
-Computers have finite memory to store floating-point numbers. Explicitly computing the softmax probabilities ($a$) and then plugging them into the log loss function ($`-\log(a)`$) can cause severe **numerical round-off errors** (overflow/underflow) if $z$ values are very large or very small.
+Computers have finite memory to store floating-point numbers. Explicitly computing the softmax probabilities ($a$) and then plugging them into the log loss function ($-\log(a)$) can cause severe **numerical round-off errors** (overflow/underflow) if $z$ values are very large or very small.
 
 **The Preferred "Logits" Method:**
 Instead of calculating $a$ as an intermediate step, we can pass the raw $z$ values (called **logits**) directly into the loss function. TensorFlow can internally rearrange the mathematical terms to compute the loss with much higher numerical stability.
 
 **Recommended TensorFlow Code:**
-```python
+
     import tensorflow as tf
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import Dense
@@ -221,17 +249,16 @@ Instead of calculating $a$ as an intermediate step, we can pass the raw $z$ valu
     )
 
     model.fit(X, Y, epochs=100)
-```
 
 **Handling Predictions:**
-Because the output layer is now linear, the model outputs raw logits (from negative to positive infinity), not probabilities. 
+Because the output layer is now linear, the model outputs raw logits (from negative to positive infinity), not probabilities.
 *   If you just need the final prediction class, you can find the index of the largest output using `np.argmax(logits)`.
 *   If you explicitly need probability percentages, you must manually pass the output logits through a softmax function: `tf.nn.softmax(logits)`.
 
 ---
 
 ### 5. Multi-label Classification
-Multi-label classification is fundamentally different from multi-class classification. 
+Multi-label classification is fundamentally different from multi-class classification.
 *   **Multi-class:** An input belongs to exactly *one* of many categories (e.g., is this image a 1, a 2, OR a 3?).
 *   **Multi-label:** An input can belong to *multiple* categories simultaneously (e.g., does this image contain a car AND a pedestrian AND a bus?).
 
@@ -244,25 +271,27 @@ To solve this, treat it as multiple independent binary classification problems c
 *   Use the **Sigmoid** activation function (not Softmax) for each of these output units.
 *   The network will output independent probabilities for each label (e.g., $a_1=0.9$ for Car, $a_2=0.1$ for Bus, $a_3=0.8$ for Pedestrian).
 
+[↑ Back to Table of Contents](#table-of-contents)
+
 ---
 
 ## Advanced Optimization and Backpropagation
 
 ### 1. Advanced Optimization: The Adam Algorithm
-Standard gradient descent uses a single global learning rate $\alpha$ for all parameters. However, some parameters might benefit from larger steps (if they consistently move in the same direction), while others need smaller steps (if they oscillate back and forth). 
+Standard gradient descent uses a single global learning rate $\alpha$ for all parameters. However, some parameters might benefit from larger steps (if they consistently move in the same direction), while others need smaller steps (if they oscillate back and forth).
 
 *   **Adaptive Moment Estimation (Adam):** An advanced optimization algorithm that automatically adjusts the learning rate for *every single parameter* independently.
     *   If a parameter keeps moving in the same direction, Adam increases its learning rate to speed up training.
     *   If a parameter oscillates back and forth, Adam decreases its learning rate to smooth out the path toward the minimum.
 *   **TensorFlow Implementation:**
-    ```python
-    import tensorflow as tf
 
-    model.compile(
-        optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),
-        loss=tf.keras.losses.BinaryCrossentropy()
-    )
-    ```
+        import tensorflow as tf
+
+        model.compile(
+            optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),
+            loss=tf.keras.losses.BinaryCrossentropy()
+        )
+
 *   **Default Standard:** Adam has become the de facto standard optimizer in deep learning because it trains networks much faster and is more robust to the choice of the initial learning rate than traditional gradient descent.
 
 ---
@@ -281,9 +310,13 @@ While dense layers connect every single neuron to all activations from the previ
 ### 3. The Computation Graph & Backpropagation
 Modern frameworks like TensorFlow use **computation graphs** and **automatic differentiation (autodiff)** to compute derivatives without requiring manual calculus.
 
-*   **Forward Propagation (Left to Right):** 
+*   **Forward Propagation (Left to Right):**
     *   Takes inputs ($X, W, B$) and flows step-by-step through nodes to compute intermediate values and ultimately the final cost $J$.
-*   **Backpropagation (Right to Left):** 
+*   **Backpropagation (Right to Left):**
     *   A right-to-left calculation that computes the partial derivative of the cost $J$ with respect to every intermediate node and parameter.
-*   **Efficiency:** 
+*   **Efficiency:**
     *   If a graph has $N$ nodes and $P$ parameters, backpropagation computes all derivatives in roughly $N + P$ steps instead of $N \times P$ steps. This difference turns billions of operations into manageable fractions of a second for large networks.
+
+---
+
+[↑ Back to Table of Contents](#table-of-contents)
