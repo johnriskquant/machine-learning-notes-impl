@@ -1,3 +1,30 @@
+## Table of Contents
+
+* [Machine Learning Diagnostics, Bias/Variance, and Model Development](#machine-learning-diagnostics-biasvariance-and-model-development)
+  * [1. Deciding What to Do Next (ML Diagnostics)](#1-deciding-what-to-do-next-ml-diagnostics)
+  * [2. Evaluating a Model](#2-evaluating-a-model)
+  * [3. Model Selection (Train / Cross-Validation / Test Split)](#3-model-selection-train--cross-validation--test-split)
+  * [4. Diagnosing Bias and Variance](#4-diagnosing-bias-and-variance)
+  * [5. Regularization and Bias/Variance](#5-regularization-and-biasvariance)
+  * [6. Establishing a Baseline Level of Performance](#6-establishing-a-baseline-level-of-performance)
+  * [7. Learning Curves](#7-learning-curves)
+  * [8. Summary: What to Try Next](#8-summary-what-to-try-next)
+  * [9. Bias/Variance and Neural Networks](#9-biasvariance-and-neural-networks)
+* [Machine Learning Development Workflow, Data Engineering, and Deployment](#machine-learning-development-workflow-data-engineering-and-deployment)
+  * [1. Iterative Loop of Machine Learning Development](#1-iterative-loop-of-machine-learning-development)
+  * [2. Error Analysis](#2-error-analysis)
+  * [3. Adding Data & Data-Centric AI](#3-adding-data--data-centric-ai)
+  * [4. Transfer Learning](#4-transfer-learning)
+  * [5. Full Cycle of a Machine Learning Project](#5-full-cycle-of-a-machine-learning-project)
+  * [6. Fairness, Bias, and Ethics](#6-fairness-bias-and-ethics)
+* [Error Metrics for Skewed Datasets](#error-metrics-for-skewed-datasets)
+  * [1. Why Classification Accuracy Fails on Skewed Datasets](#1-why-classification-accuracy-fails-on-skewed-datasets)
+  * [2. Confusion Matrix, Precision, and Recall](#2-confusion-matrix-precision-and-recall)
+  * [3. Trading Off Precision and Recall](#3-trading-off-precision-and-recall)
+  * [4. Combining Precision and Recall: The $F_1$ Score](#4-combining-precision-and-recall-the-f_1-score)
+
+---
+
 ## Machine Learning Diagnostics, Bias/Variance, and Model Development
 
 ### 1. Deciding What to Do Next (ML Diagnostics)
@@ -170,7 +197,7 @@ $$J(W, B) = \frac{1}{m} \sum_{i=1}^{m} L\left(f_{W,B}(\vec{x}^{(i)}), y^{(i)}\ri
 *(Regularization is applied to all weights $W$ across layers; bias parameters $b$ are typically left unregularized).*
 
 **TensorFlow Implementation:**
-```python
+
     import tensorflow as tf
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import Dense
@@ -181,7 +208,8 @@ $$J(W, B) = \frac{1}{m} \sum_{i=1}^{m} L\left(f_{W,B}(\vec{x}^{(i)}), y^{(i)}\ri
         Dense(units=15, activation='relu', kernel_regularizer=L2(0.01)),
         Dense(units=1, activation='sigmoid', kernel_regularizer=L2(0.01))
     ])
-```
+
+[↑ Back to Table of Contents](#table-of-contents)
 
 ---
 
@@ -312,6 +340,8 @@ Machine learning systems impact billions of people and can cause significant har
 4.  **Establish Mitigation & Rollback Plans:** Prepare immediate fallback mechanisms (such as reverting to a known fair prior system) and continuously monitor live deployments for emerging harms.
 5.  **Uphold Ethical Boundaries:** Refuse or terminate projects that make society worse off, even if the financial case is sound.
 
+[↑ Back to Table of Contents](#table-of-contents)
+
 ---
 
 ## Error Metrics for Skewed Datasets
@@ -382,3 +412,7 @@ $$F_1 = \frac{1}{\frac{1}{2}\left(\frac{1}{P} + \frac{1}{R}\right)} = \frac{2PR}
 | **Algorithm 1** | $0.50$ | $0.40$ | $0.45$ | **$0.444$** | **Best overall balance** |
 | **Algorithm 2** | $0.70$ | $0.10$ | $0.40$ | **$0.175$** | Penalized for very low recall |
 | **Algorithm 3** | $0.02$ | $1.00$ | $0.51$ | **$0.0392$** | Degenerate (predicts almost all $1$s) |
+
+---
+
+[↑ Back to Table of Contents](#table-of-contents)
